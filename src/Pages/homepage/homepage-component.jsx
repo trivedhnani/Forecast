@@ -1,18 +1,8 @@
 import React from "react";
-class Homepage extends React.Component{
-    constructor(){
-        super();
-        this.state={}
-    }
-    componentDidMount(){
-
-    }
-    render(){
-        return(
-            <div>
-                <p>Amma baaboi</p>
-            </div>
-        )
-    }
-}
+import Weather from "../../Components/weather/weather-component";
+const Homepage = () => (
+  <div>
+    <Weather></Weather>
+  </div>
+);
 export default Homepage;
