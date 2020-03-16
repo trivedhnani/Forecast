@@ -4,12 +4,14 @@ import axios from "axios";
 import Day from "../day/Day-component";
 import response from "../../sample";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { setWeather } from "../../redux/weather/weather-action";
 class Weather extends React.Component {
   constructor() {
     super();
     this.state = {
-      list: []
-      // isLoading: true
+      list: [],
+      isLoading: true
     };
   }
   async componentDidMount() {
@@ -21,6 +23,7 @@ class Weather extends React.Component {
     // } catch (err) {
     //   console.log("Couldn't fetch data!!");
     // }
+    const { setWeather } = this.props;
     let list = response.list;
     list = list.reduce((acc, cur) => {
       const length = acc.length;
@@ -41,22 +44,18 @@ class Weather extends React.Component {
       }
       return acc;
     }, []);
-    this.setState(
-      {
-        list,
-        isLoading: false
-      },
-      () => {
-        console.log(this.state);
-        console.log(this.props.match);
-      }
-    );
+    setWeather(list);
+    this.setState({
+      isLoading: false
+    });
   }
   render() {
+    const { weatherList } = this.props;
+    console.log(this.props);
     return (
       <div className="day">
-        {this.state.list.map(day => {
-          const id = this.state.list.indexOf(day);
+        {weatherList.map(day => {
+          const id = weatherList.indexOf(day);
           return (
             <Day
               key={id}
@@ -68,4 +67,12 @@ class Weather extends React.Component {
     );
   }
 }
-export default withRouter(Weather);
+const mapStateToProps = state => ({
+  weatherList: state.weather.list
+});
+const mapDispatchToProps = dispatch => ({
+  setWeather: weather => dispatch(setWeather(weather))
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Weather)
+);
