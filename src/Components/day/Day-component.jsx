@@ -1,11 +1,13 @@
 import React from "react";
-import logo from "../../logo.svg";
 import "./Day-styles.css";
 // import logo from ''
-const Day = props => (
-  <span {...props}>
-    <img src={logo} width="200px" height="200px" alt="current weather" />
-    <p>Current weather</p>
-  </span>
-);
+const Day = ({ date, time, img, children, ...otherProps }) => {
+  // console.log(children);
+  return (
+    <span {...otherProps}>
+      <img src={img} width="100px" height="100px" alt="current weather" />
+      {children}
+    </span>
+  );
+};
 export default Day;

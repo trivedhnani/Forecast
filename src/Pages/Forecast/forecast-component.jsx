@@ -2,12 +2,19 @@ import React from "react";
 import { connect } from "react-redux";
 import "./forecast-styles.css";
 import Day from "../../Components/day/Day-component";
+import Information from "../../Components/Information/info-component";
 const Forecast = ({ match, weather, ...props }) => {
   const hourlyTemp = weather[match.params.day - 1];
   return (
     <div className="comp">
       {hourlyTemp.map((hour, index) => (
-        <Day key={index}></Day>
+        <Day
+          key={index}
+          img={`http://openweathermap.org/img/wn/${hour["weather"][0]["icon"]}@2x.png`}
+        >
+          <p>{hour["dt_txt"].split(" ")[1]}</p>
+          <Information info={hour} />
+        </Day>
       ))}
     </div>
   );
