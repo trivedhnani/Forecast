@@ -18,16 +18,18 @@ class Weather extends React.Component {
     };
     this.searchRef = React.createRef();
   }
-  async componentDidMount() {
-    const { search } = this.props;
+  fecthAndSetStates = async () => {
     try {
+      const { setSearch } = this.props;
+      await setSearch(document.getElementById("searchField").value);
+      // this.componentDidMount();
+      const { search } = this.props;
       // TODO-- Add a search box for cities
       const res = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=3b612f18b77b5f926dac44b347a2c33c&units=imperial`
       );
       console.log(res);
       const { setWeather } = this.props;
-
       let list = res.data.list;
       list = list.reduce((acc, cur) => {
         const length = acc.length;
@@ -56,11 +58,12 @@ class Weather extends React.Component {
     } catch (err) {
       console.log("Couldn't fetch data!!" + err);
     }
+  };
+  async componentDidMount() {
+    this.fecthAndSetStates();
   }
   handelClick = async event => {
-    const { setSearch } = this.props;
-    setSearch(document.getElementById("searchField").value);
-    this.componentDidMount();
+    this.fecthAndSetStates();
   };
   render() {
     const { weatherList } = this.props;

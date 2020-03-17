@@ -9,7 +9,7 @@ const DayList = ({ weatherList, history, ...otherProps }) => {
       <Day
         key={id}
         onClick={() => history.push(`/forecast/${id}`)} //id should be replaced by date of the day
-        img={`http://openweathermap.org/img/wn/${day[0]["weather"][0]["icon"]}@2x.png`}
+        img={`https://openweathermap.org/img/wn/${day[0]["weather"][0]["icon"]}@2x.png`}
       >
         <p>{day[0]["dt_txt"].split(" ")[0]}</p>
         <Information info={day[0]} />
