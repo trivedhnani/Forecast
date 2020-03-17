@@ -1,6 +1,7 @@
 import React from "react";
 import "./info-styles.css";
 const Information = ({ info }) => {
+  // const fahrenheitFactor=
   return (
     <div>
       <b>{info["weather"][0]["description"].toUpperCase()}</b>

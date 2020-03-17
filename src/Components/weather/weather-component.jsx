@@ -1,11 +1,14 @@
 import React from "react";
 import "./weather-styles.css";
 import axios from "axios";
-import Day from "../day/Day-component";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setWeather } from "../../redux/weather/weather-action";
-import Information from "../Information/info-component";
+import Search from "../search/search-component";
+import { setSearch } from "../../redux/search/search-action";
+import CustomButton from "../customButton/custom-button.component";
+import DayList from "../daylist/DayList.component";
+import EmptyPage from "../EmptyPage/EmptyPage.component";
 class Weather extends React.Component {
   constructor() {
     super();
@@ -13,14 +16,18 @@ class Weather extends React.Component {
       list: [],
       isLoading: true
     };
+    this.searchRef = React.createRef();
   }
   async componentDidMount() {
+    const { search } = this.props;
     try {
+      // TODO-- Add a search box for cities
       const res = await axios.get(
-        "https://api.openweathermap.org/data/2.5/forecast?q=Boston&appid=3b612f18b77b5f926dac44b347a2c33c"
+        `https://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=3b612f18b77b5f926dac44b347a2c33c&units=imperial`
       );
       console.log(res);
       const { setWeather } = this.props;
+
       let list = res.data.list;
       list = list.reduce((acc, cur) => {
         const length = acc.length;
@@ -50,33 +57,42 @@ class Weather extends React.Component {
       console.log("Couldn't fetch data!!" + err);
     }
   }
+  handelClick = async event => {
+    const { setSearch } = this.props;
+    setSearch(document.getElementById("searchField").value);
+    this.componentDidMount();
+  };
   render() {
     const { weatherList } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <div className="day">
-        {weatherList.map(day => {
-          const id = weatherList.indexOf(day) + 1;
-          return (
-            <Day
-              key={id}
-              onClick={() => this.props.history.push(`/forecast/${id}`)}
-              img={`http://openweathermap.org/img/wn/${day[0]["weather"][0]["icon"]}@2x.png`}
-            >
-              <p>{day[0]["dt_txt"].split(" ")[0]}</p>
-              <Information info={day[0]} />
-            </Day>
-          );
-        })}
+        <Search
+          id="searchField"
+          className="input"
+          defaultValue={this.props.search}
+        ></Search>
+        <CustomButton className="input" id="button" onClick={this.handelClick}>
+          Search
+        </CustomButton>
+        <div className="weatherList">
+          {weatherList.length > 0 ? (
+            <DayList weatherList={weatherList} />
+          ) : (
+            <EmptyPage />
+          )}
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = state => ({
-  weatherList: state.weather.list
+  weatherList: state.weather.list,
+  search: state.search.search
 });
 const mapDispatchToProps = dispatch => ({
-  setWeather: weather => dispatch(setWeather(weather))
+  setWeather: weather => dispatch(setWeather(weather)),
+  setSearch: search => dispatch(setSearch(search))
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Weather)

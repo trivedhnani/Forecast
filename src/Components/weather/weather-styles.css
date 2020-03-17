@@ -1,5 +1,15 @@
 .day {
+  display: block;
+  /* flex-wrap: wrap;
+  justify-content: space-evenly; */
+}
+.weatherList {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+.input {
+  height: 30px;
+  margin: 3px;
+  box-sizing: content-box;
 }
