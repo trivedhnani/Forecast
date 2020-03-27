@@ -4,7 +4,14 @@ import "./forecast-styles.css";
 import Day from "../../Components/day/Day-component";
 import Information from "../../Components/Information/info-component";
 const Forecast = ({ match, weather, ...props }) => {
-  const hourlyTemp = weather[match.params.day - 1];
+  const day = match.params.day;
+  let hourlyTemp = [];
+  weather.forEach(el => {
+    if (day === el[0]["dt_txt"].split(" ")[0]) {
+      hourlyTemp = [...hourlyTemp, ...el];
+    }
+  });
+
   return (
     <div className="comp">
       {hourlyTemp.map((hour, index) => (
